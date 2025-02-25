@@ -1,8 +1,7 @@
 import gymnasium
 from nn.hyperparameters import episodes, target_update_freq, epsilon_min, epsilon_decay
 from nn.network import DQNAgent
-from nn.graphic import create_graph, show_graph
-
+import time
 
 
 def main():
@@ -41,8 +40,27 @@ def main():
 
         epsilon = max(epsilon_min, epsilon_decay * epsilon)        
         rewards_per_episode.append(episode_reward)
-        create_graph(rewards_per_episode)
-        show_graph()
+
+    env.close()
+
+    env = gymnasium.make("CartPole-v1", render_mode = 'human')
+    state, _ = env.reset()
+
+    episode_reward = 0
+    done = False
+    
+    while not done:
+        
+        action = agent.select_action(state, 0)
+        next_state, reward, done, _, _ = env.step(action)
+        env.render()
+        state = next_state
+        episode_reward += reward
+
+        time.sleep(1 / 60)
+
+    print('Recompensa:', episode_reward)
+    env.close()
     
 
 if __name__ == "__main__":
