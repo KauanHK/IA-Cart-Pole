@@ -16,14 +16,14 @@ def main():
     for ep in range(episodes):
         print(ep, end = ' - ')
 
-        state = env.reset()
+        state, _ = env.reset()
         episode_reward = 0
         done = False
         
         while not done:
 
             action = agent.select_action(state, epsilon)
-            next_state, reward, done, *_ = env.step(action)
+            next_state, reward, done, _, _ = env.step(action)
             
             agent.memory.append((state, action, reward, next_state, done))
             
